@@ -119,23 +119,15 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
 
 /**
- * A scheduler that schedules resources between a set of queues. The scheduler
- * keeps track of the resources used by each queue, and attempts to maintain
- * fairness by scheduling tasks at queues whose allocations are farthest below
- * an ideal fair distribution.
- * 
- * The fair scheduler supports hierarchical queues. All queues descend from a
- * queue named "root". Available resources are distributed among the children
- * of the root queue in the typical fair scheduling fashion. Then, the children
- * distribute the resources assigned to them to their children in the same
- * fashion.  Applications may only be scheduled on leaf queues. Queues can be
- * specified as children of other queues by placing them as sub-elements of
- * their parents in the fair scheduler configuration file.
+ * 是一个在多队列间调度资源的调度器，它会追踪每一个队列使用的资源，而且通过调度资源分配远低于
+ * 理想公平分配的队列中的任务来尽量保证公平。
  *
- * A queue's name starts with the names of its parents, with periods as
- * separators.  So a queue named "queue1" under the root named, would be 
- * referred to as "root.queue1", and a queue named "queue2" under a queue
- * named "parent1" would be referred to as "root.parent1.queue2".
+ * 公平调度器支持队列分层，所有的队列都继承自root队列。可用资源将按照公平调度原则在这些子队列
+ * 中进行分配，然后这些子队列再按照同样的方式将自己的资源分配自己的自队列。应用程序只能在队列
+ * 的叶节点上，队列可以通过在配置文件将自己放在其他队列附备元素中而被指定为其他队列的子队列
+ *
+ * 队列名称以父队列开头，`.`作为分隔符，例如一个名叫`queue1`的队列，如果在root队列下，名称
+ * 将会是`root.queue1`,名为`queue2`的队列在queue1队列下，名称将会是`root.queue1.queue2`
  */
 @LimitedPrivate("yarn")
 @Unstable
