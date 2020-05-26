@@ -29,46 +29,26 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.RecordReader;
 
 /**
- * <code>InputSplit</code> represents the data to be processed by an 
- * individual {@link Mapper}. 
- *
- * <p>Typically, it presents a byte-oriented view on the input and is the 
- * responsibility of {@link RecordReader} of the job to process this and present
- * a record-oriented view.
- * 
- * @see InputFormat
- * @see RecordReader
+ * InputSplit代表的就是一个独立mapper处理的数据，它是面向字节的(即是一系列字节的集合)
+ * 也是记录读取器处理的任务
  */
 @InterfaceAudience.Public
 @InterfaceStability.Stable
 public abstract class InputSplit {
   /**
-   * Get the size of the split, so that the input splits can be sorted by size.
-   * @return the number of bytes in the split
-   * @throws IOException
-   * @throws InterruptedException
+   * 获得切片的大小以便于按照大小进行排序(这里涉及到后续combineInputFormat的实现)
    */
   public abstract long getLength() throws IOException, InterruptedException;
 
   /**
-   * Get the list of nodes by name where the data for the split would be local.
-   * The locations do not need to be serialized.
-   * 
-   * @return a new array of the node nodes.
-   * @throws IOException
-   * @throws InterruptedException
+   * 获得切片数据存储的节点列表(即物理存储的节点列表)
    */
   public abstract 
     String[] getLocations() throws IOException, InterruptedException;
   
   /**
-   * Gets info about which nodes the input split is stored on and how it is
-   * stored at each location.
-   * 
-   * @return list of <code>SplitLocationInfo</code>s describing how the split
-   *    data is stored at each location. A null value indicates that all the
-   *    locations have the data stored on disk.
-   * @throws IOException
+   * 获得切片存储在哪些节点上以及在各个位置如何存储的
+   * 返回null表示所有位置的数据都是存在磁盘上的
    */
   @Evolving
   public SplitLocationInfo[] getLocationInfo() throws IOException {
